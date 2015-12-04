@@ -1,9 +1,17 @@
 # User login
 
 post '/users/login' do
-	user = User.find_by(email: params[:email], password: params[:password])
-	session[:user_id] = user.id
-	redirect "/users/#{user.id}"
+	user = User.find_by(email: params[:email])
+	if user.nil?
+		erb :"user/error"
+	else
+		if user.authenticate(params[:password])
+		session[:user_id] = user.id
+		redirect "/users/#{user.id}"
+		else
+		erb :"user/error"
+	end
+	end
 end
 
 # User logout
@@ -22,9 +30,19 @@ end
 # Create new user
 
 post '/users' do
+	#params = Has.new
+	# params[:zoo]
 	user = User.create(name: params[:name], email: params[:email], password: params[:password])
 	redirect "/users/#{user.id}"
 end
+
+# View user profile
+
+get '/users/:id' do
+	@user = User.find(params[:id])
+	erb :'user/show'
+end
+
 
 # Display user edit form
 
@@ -49,12 +67,6 @@ delete '/users/:id' do
 	erb :'static/index'
 end
 
-# View user profile
-
-get '/users/:id' do
-	@user = User.find(params[:id])
-	erb :'user/show'
-end
 
 # View login page
 

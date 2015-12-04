@@ -15,6 +15,9 @@ gem 'activerecord'
 gem 'activesupport'
 gem 'sinatra-activerecord'
 
+# Secure passwords
+gem 'bcrypt'
+
 # Adding Database elements
 gem 'pg'
 
