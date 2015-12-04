@@ -1,6 +1,3 @@
-
-
-
 class CreateUser < ActiveRecord::Migration
 	def change
 		create_table :users do |t|
@@ -8,7 +5,6 @@ class CreateUser < ActiveRecord::Migration
 			t.string :email
 			t.string :password_digest
 			t.string :description
-
 			t.timestamps null: false
 		end
 	end

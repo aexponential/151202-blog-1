@@ -1,0 +1,48 @@
+<date>Question asked by <a href="/users/<%= @question.user.id %>"><%= @question.user.name %></a> • <%= calculate_time_ago(@question.created_at) %></date>
+<h2><%= @question.body %></h2>
+
+<% if logged_in? %>
+	<button class="answer-button"><i class="fa fa-pencil"></i> Write answer</button>
+<% end %>
+<form action="/questions/<%= @question.id %>/upvote" method="post" class="form-inline">
+	<button>Upvote<%= "&nbsp;<span class='bar'>&nbsp;</span>#{@question_vote_count}" if @question_vote_count != 0 %></button>
+</form>
+<form action="/questions/<%= @question.id %>/downvote" method="post" class="form-inline">
+	<input type="submit" value="Downvote" class="downvote">
+</form>
+<a href=""></a>
+<% if @question.user == current_user %>
+	<a href="/questions/<%= @question.id %>/edit" class="right"><button>Edit question</button></a>
+<% end %>
+
+<div class="answer-box">
+	<h3>Post your answer</h3>
+	<%= erb :"answer/new" %>
+</div>
+
+<% if @answers %>
+	<% @answers.each do |answer| %>
+		<hr>
+		<div class="avatar-box-left">
+			<img src="<%= answer.user.avatar %>" alt="<%= answer.user.name %>" class="avatar">
+		</div>
+		<div class="avatar-box-right">
+			<a href="/users/<%= answer.user.id %>"><%= answer.user.name %></a><%= "<span style=\"font-family: sans-serif;\">, #{answer.user.description}</span>" if answer.user.description %><br>
+			<date><%= pluralize(answer.user.questions.count, 'question') %> asked • <%= pluralize(answer.user.answers.count, 'question') %> answered</date>
+		</div>
+		<div class="clearfix"></div>
+		<div class="answer">
+			<%= answer.body %><br />
+			<date>Updated <%= calculate_time_ago(answer.updated_at) %></date>
+		</div>
+		<form action="/questions/<%= @question.id %>/answer/<%= answer.id %>/upvote" method="post" class="form-inline">
+			<button>Upvote<%= "&nbsp;<span class='bar'>&nbsp;</span>#{answer.count_votes}" if answer.count_votes != 0 %></button>
+		</form>
+		<form action="/questions/<%= @question.id %>/answer/<%= answer.id %>/downvote" method="post" class="form-inline">
+			<input type="submit" value="Downvote" class="downvote">
+		</form>
+		<% if answer.user == current_user %>
+			<a href="/answers/<%= answer.id %>/edit" class="right"><button>Edit answer</button></a>
+		<% end %>
+	<% end %>
+<% end %>

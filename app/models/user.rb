@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+	has_many :posts
+	has_many :questions
+	has_many :questionvotes
+	has_many :answervotes
+	has_secure_password
+
 	validates :email, uniqueness: true
 
 	def self.authenticate(email, password)
@@ -10,5 +16,7 @@ class User < ActiveRecord::Base
 		end		
 	end
 	
-	has_secure_password
+	
+	
+	
 end
